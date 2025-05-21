@@ -25,11 +25,24 @@ class TitleAndPrice extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-               ,
+                TextSpan(
+                  text: country,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: kPrimaryColor,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
               ],
             ),
           ),
-          
+          Spacer(),
+          Text(
+            "\$$price",
+            style: Theme.of(
+              context,
+            ).textTheme.headline5.copyWith(color: kPrimaryColor),
+          ),
         ],
       ),
     );
