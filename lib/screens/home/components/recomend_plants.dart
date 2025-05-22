@@ -61,22 +61,9 @@ class RecomendPlantCard extends StatelessWidget {
 
   final String image, title, country;
   final int price;
-  final Function press;
+  final VoidCallback press;
 
   @override
-  Widget build(BuildContext context) {
-    // Isi build method kamu di sini
-    return Container(); // Ganti dengan widget aslinya
-  }
-}
-
-
-final String image, title, country;
-final int price;
-final Function press;
-
-
-    @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -114,7 +101,7 @@ final Function press;
                       children: [
                         TextSpan(
                           text: "$title\n".toUpperCase(),
-style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                         TextSpan(
                           text: "$country".toUpperCase(),
@@ -128,9 +115,9 @@ style: Theme.of(context).textTheme.labelLarge,
                   Spacer(),
                   Text(
                     '\$$price',
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: AppColors.kPrimaryColor,
-                        ),
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: AppColors.kPrimaryColor,
+                    ),
                   ),
                 ],
               ),
@@ -140,3 +127,4 @@ style: Theme.of(context).textTheme.labelLarge,
       ),
     );
   }
+}

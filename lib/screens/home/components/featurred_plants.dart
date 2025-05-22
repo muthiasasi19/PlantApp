@@ -28,7 +28,7 @@ class FeaturePlantCard extends StatelessWidget {
   const FeaturePlantCard({super.key, required this.image, required this.press});
 
   final String image;
-  final Function press;
+  final VoidCallback press;
 
   @override
   Widget build(BuildContext context) {
