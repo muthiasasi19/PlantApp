@@ -115,6 +115,21 @@ on<SaveImageAsProfile>((event, emit) async {
     ),
   );
 }
+Future<void> _onRequestPermissions(
+  RequestPermissions event,
+  Emitter<CameraState> emit,
+) async {
+  final statuses = await [Permission.camera, Permission.storage].request();
+
+  final denied = statuses.entries.where((e) => !e.value.isGranted).toList();
+
+  if (denied.isNotEmpty) {
+    // Tangani jika ada izin yang ditolak
+  } else {
+    // Izin diberikan, langsung trigger init kamera
+    add(InitializeCamera());
+  }
+}
 
 
   
