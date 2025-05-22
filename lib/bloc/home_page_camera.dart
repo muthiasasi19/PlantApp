@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'camera_page.dart';
 import 'package:plant_app/bloc/camera_bloc.dart';
@@ -64,6 +63,70 @@ class HomePage extends StatelessWidget {
                             if (file != null) Navigator.pop(context, file);
                           },
                         ),
-                       
-}
+                        const SizedBox(width: 10),
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.camera_alt),
+                          label: const Text('Ambil Foto'),
+                          onPressed: () async {
+                            final bloc = context.read<CameraBloc>();
+                            if (bloc.state is! CameraReady) {
+                              bloc.add(InitializeCamera());
+                            }
+                            final file = await Navigator.push<File?>(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (_) => BlocProvider.value(
+                                      value: bloc,
+                                      child: const CameraPage(),
+                                    ),
+                              ),
+                            );
 
+                            if (file != null) {
+                              bloc.add(UpdateImageFile(file));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+
+                    if (imageFile != null) ...[
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton.icon(
+                            icon: const Icon(Icons.save),
+                            label: const Text('Simpan Foto'),
+                            onPressed: () {
+                              // Panggil event simpan ke path tertentu atau SharedPreferences
+                              context.read<CameraBloc>().add(
+                                SaveImageAsProfile(),
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 16),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                            ),
+                            icon: const Icon(Icons.delete),
+                            label: const Text('Hapus Foto'),
+                            onPressed: () {
+                              context.read<CameraBloc>().add(DeleteImage());
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
