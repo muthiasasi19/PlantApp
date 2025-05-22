@@ -25,6 +25,23 @@ class MyBottomNavBar extends StatelessWidget {
           ),
         ],
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            icon: SvgPicture.asset("assets/icons/flower.svg"),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: SvgPicture.asset("assets/icons/heart-icon.svg"),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: SvgPicture.asset("assets/icons/user-icon.svg"),
+            onPressed: () {},
+          ),
+        ],
+      ),
     );
   }
 }
