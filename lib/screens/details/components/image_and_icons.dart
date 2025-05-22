@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../constants.dart';
+import '../../../theme_constants.dart';
 import 'icon_card.dart';
 
 class ImageAndIcons extends StatelessWidget {
-  const ImageAndIcons({Key key, @required this.size}) : super(key: key);
+  const ImageAndIcons({super.key, required this.size});
 
   final Size size;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: kDefaultPadding * 3),
+      padding: const EdgeInsets.only(bottom: AppSpacing.kDefaultPadding * 3),
       child: SizedBox(
         height: size.height * 0.8,
         child: Row(
@@ -20,7 +20,7 @@ class ImageAndIcons extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: kDefaultPadding * 3,
+                  vertical: AppSpacing.kDefaultPadding * 3,
                 ),
                 child: Column(
                   children: <Widget>[
@@ -28,7 +28,7 @@ class ImageAndIcons extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: IconButton(
                         padding: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding,
+                          horizontal: AppSpacing.kDefaultPadding,
                         ),
                         icon: SvgPicture.asset("assets/icons/back_arrow.svg"),
                         onPressed: () {
@@ -57,7 +57,7 @@ class ImageAndIcons extends StatelessWidget {
                   BoxShadow(
                     offset: Offset(0, 10),
                     blurRadius: 60,
-                    color: kPrimaryColor.withOpacity(0.29),
+                    color: AppColors.kPrimaryColor.withOpacity(0.29),
                   ),
                 ],
                 image: DecorationImage(

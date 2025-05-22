@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../../../theme_constants.dart';
 
 class FeaturedPlants extends StatelessWidget {
   const FeaturedPlants({Key key}) : super(key: key);

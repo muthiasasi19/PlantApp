@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plant_app/screens/details/details_screen.dart';
 
-import '../../../constants.dart';
+import '../../../theme_constants.dart';
 
 class RecomendsPlants extends StatelessWidget {
   const RecomendsPlants({Key key}) : super(key: key);

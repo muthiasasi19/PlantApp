@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../../../theme_constants.dart';
 
 class TitleAndPrice extends StatelessWidget {
   const TitleAndPrice({Key key, this.title, this.country, this.price})
