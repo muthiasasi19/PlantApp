@@ -76,6 +76,27 @@ Future<void> _onTakePicture(
   );
 }
 
+on<SaveImageAsProfile>((event, emit) async {
+  if (state is! CameraReady) return;
+
+  final current = state as CameraReady;
+  final imageFile = current.imageFile;
+  if (imageFile == null) return;
+
+  try {
+    final savedFile = await StorageHelper.saveImage(imageFile, 'profile_');
+
+    emit(
+      current.copyWith(
+        imageFile: savedFile,
+        snackbarMessage: 'Foto profil berhasil disimpan!',
+      ),
+    );
+  } catch (e) {
+    emit(current.copyWith(snackbarMessage: 'Gagal menyimpan foto: $e'));
+  }
+});
+
 
   
 
