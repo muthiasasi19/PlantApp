@@ -10,8 +10,13 @@ class Body extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          ImageAndIcons(size: size),
-          TitleAndPrice(title: "Angelica", country: "Russia", price: 440),
+          ImageAndIcons(key: UniqueKey(), size: size),
+          TitleAndPrice(
+            key: UniqueKey(),
+            title: "Angelica",
+            country: "Russia",
+            price: 440,
+          ),
           SizedBox(height: AppSpacing.kDefaultPadding),
           Row(
             children: <Widget>[
@@ -34,8 +39,16 @@ class Body extends StatelessWidget {
                   ),
                 ),
               ),
+
+              SizedBox(width: 10),
               Expanded(
-                child: TextButton(onPressed: () {}, child: Text("Description")),
+                child: SizedBox(
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    child: Text("Description"),
+                  ),
+                ),
               ),
             ],
           ),

@@ -5,7 +5,7 @@ import '../../../theme_constants.dart';
 import 'icon_card.dart';
 
 class ImageAndIcons extends StatelessWidget {
-  const ImageAndIcons({super.key, required this.size});
+  const ImageAndIcons({required Key key, required this.size}) : super(key: key);
 
   final Size size;
 
@@ -14,7 +14,7 @@ class ImageAndIcons extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.kDefaultPadding * 3),
       child: SizedBox(
-        height: size.height * 0.8,
+        height: size.height * 0.75,
         child: Row(
           children: <Widget>[
             Expanded(
@@ -37,16 +37,16 @@ class ImageAndIcons extends StatelessWidget {
                       ),
                     ),
                     Spacer(),
-                    IconCard(icon: "assets/icons/sun.svg"),
-                    IconCard(icon: "assets/icons/icon_2.svg"),
-                    IconCard(icon: "assets/icons/icon_3.svg"),
-                    IconCard(icon: "assets/icons/icon_4.svg"),
+                    IconCard(key: UniqueKey(), icon: "assets/icons/sun.svg"),
+                    IconCard(key: UniqueKey(), icon: "assets/icons/icon_2.svg"),
+                    IconCard(key: UniqueKey(), icon: "assets/icons/icon_3.svg"),
+                    IconCard(key: UniqueKey(), icon: "assets/icons/icon_4.svg"),
                   ],
                 ),
               ),
             ),
             Container(
-              height: size.height * 0.8,
+              height: double.infinity,
               width: size.width * 0.75,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(

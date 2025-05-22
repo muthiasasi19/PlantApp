@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plant_app/components/my_bottom_nav_bar.dart';
 import 'package:plant_app/screens/home/components/body.dart';
+import 'package:plant_app/theme_constants.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -16,6 +17,8 @@ class HomeScreen extends StatelessWidget {
   AppBar buildAppBar() {
     return AppBar(
       elevation: 0,
+      backgroundColor: AppColors.kPrimaryColor,
+
       leading: IconButton(
         icon: SvgPicture.asset("assets/icons/menu.svg"),
         onPressed: () {},
