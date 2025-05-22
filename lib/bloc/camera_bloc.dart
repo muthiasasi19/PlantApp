@@ -21,10 +21,51 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
 
   CameraBloc() : super(CameraInitial()) {
     on<InitializeCamera>(_onInit);
-    
+    on<SwitchCamera>(_onSwitch);
+    on<ToggleFlash>(_onToggleFlash);
+    on<TakePicture>(_onTakePicture);
+    on<TapToFocus>(_onTapFocus);
+    on<PickImageFromGallery>(_onPickGallery);
+    on<OpenCameraAndCapture>(_onOpenCamera);
+    on<DeleteImage>(_onDeleteImage);
+    on<ClearSnackbar>(_onClearSnackbar);
+    on<RequestPermissions>(_onRequestPermissions);
+    on<UpdateImageFile>((event, emit) {
+      if (state is CameraReady) {
+        final currentState = state as CameraReady;
+        emit(
+          CameraReady(
+            controller: currentState.controller,
+            selectedIndex: currentState.selectedIndex, // wajib ditambahkan
+            flashMode: currentState.flashMode,
+            imageFile: event.file,
+            snackbarMessage: currentState.snackbarMessage,
+          ),
+        );
+      }
     });
 
-    
+    on<SaveImageAsProfile>((event, emit) async {
+      if (state is! CameraReady) return;
+
+      final current = state as CameraReady;
+      final imageFile = current.imageFile;
+      if (imageFile == null) return;
+
+      try {
+        final savedFile = await StorageHelper.saveImage(imageFile, 'profile_');
+
+        emit(
+          current.copyWith(
+            imageFile: savedFile,
+            snackbarMessage: 'Foto profil berhasil disimpan!',
+          ),
+        );
+      } catch (e) {
+        emit(current.copyWith(snackbarMessage: 'Gagal menyimpan foto: $e'));
+      }
+    });
+  }
 
   Future<void> _onInit(
     InitializeCamera event,
@@ -40,102 +81,119 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
     final next = (s.selectedIndex + 1) % _cameras.length;
     await _setupController(next, emit, previous: s);
   }
-Future<void> _onTakePicture(
-  TakePicture event,
-  Emitter<CameraState> emit,
-) async {
-  if (state is! CameraReady) return;
-  final s = state as CameraReady;
 
-  if (!s.controller.value.isInitialized) {
-    emit(s.copyWith(snackbarMessage: "Kamera belum siap"));
-    return;
+  Future<void> _onToggleFlash(
+    ToggleFlash event,
+    Emitter<CameraState> emit,
+  ) async {
+    if (state is! CameraReady) return;
+    final s = state as CameraReady;
+    final next =
+        s.flashMode == FlashMode.off
+            ? FlashMode.auto
+            : s.flashMode == FlashMode.auto
+            ? FlashMode.always
+            : FlashMode.off;
+    await s.controller.setFlashMode(next);
+    emit(s.copyWith(flashMode: next));
   }
 
-  try {
-    final file = await s.controller.takePicture();
-    event.onPictureTaken(File(file.path));
-  } catch (e) {
-    emit(s.copyWith(snackbarMessage: "Gagal mengambil gambar: $e"));
+  Future<void> _onTakePicture(
+    TakePicture event,
+    Emitter<CameraState> emit,
+  ) async {
+    if (state is! CameraReady) return;
+    final s = state as CameraReady;
+
+    if (!s.controller.value.isInitialized) {
+      emit(s.copyWith(snackbarMessage: "Kamera belum siap"));
+      return;
+    }
+
+    try {
+      final file = await s.controller.takePicture();
+      event.onPictureTaken(File(file.path));
+    } catch (e) {
+      emit(s.copyWith(snackbarMessage: "Gagal mengambil gambar: $e"));
+    }
   }
-}
 
- Future<void> _onPickGallery(
-  PickImageFromGallery event,
-  Emitter<CameraState> emit,
-) async {
-  final picker = ImagePicker();
-  final picked = await picker.pickImage(source: ImageSource.gallery);
-  if (picked == null) return;
-  final file = File(picked.path);
-  emit(
-    (state as CameraReady).copyWith(
-      imageFile: file,
-      snackbarMessage: 'Berhasil memilih dari galeri',
-    ),
-  );
-}
+  Future<void> _onTapFocus(TapToFocus event, Emitter<CameraState> emit) async {
+    if (state is! CameraReady) return;
+    final s = state as CameraReady;
+    final relative = Offset(
+      event.position.dx / event.previewSize.width,
+      event.position.dy / event.previewSize.height,
+    );
+    await s.controller.setFocusPoint(relative);
+    await s.controller.setExposurePoint(relative);
+  }
 
-on<SaveImageAsProfile>((event, emit) async {
-  if (state is! CameraReady) return;
-
-  final current = state as CameraReady;
-  final imageFile = current.imageFile;
-  if (imageFile == null) return;
-
-  try {
-    final savedFile = await StorageHelper.saveImage(imageFile, 'profile_');
-
+  Future<void> _onPickGallery(
+    PickImageFromGallery event,
+    Emitter<CameraState> emit,
+  ) async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked == null) return;
+    final file = File(picked.path);
     emit(
-      current.copyWith(
-        imageFile: savedFile,
-        snackbarMessage: 'Foto profil berhasil disimpan!',
+      (state as CameraReady).copyWith(
+        imageFile: file,
+        snackbarMessage: 'Berhasil memilih dari galeri',
       ),
     );
-  } catch (e) {
-    emit(current.copyWith(snackbarMessage: 'Gagal menyimpan foto: $e'));
   }
-});
 
+  Future<void> _onOpenCamera(
+    OpenCameraAndCapture event,
+    Emitter<CameraState> emit,
+  ) async {
+    if (state is! CameraReady) return;
+    final file = await Navigator.push<File?>(
+      event.context,
+      MaterialPageRoute(
+        builder:
+            (_) => BlocProvider.value(value: this, child: const CameraPage()),
+      ),
+    );
+    if (file != null) {
+      final saved = await StorageHelper.saveImage(file, 'camera');
+      emit(
+        (state as CameraReady).copyWith(
+          imageFile: saved,
+          snackbarMessage: 'Disimpan: ${saved.path}',
+        ),
+      );
+    }
+  }
 
   Future<void> _onDeleteImage(
-  DeleteImage event,
-  Emitter<CameraState> emit,
-) async {
-  if (state is! CameraReady) return;
-  final s = state as CameraReady;
-  await s.imageFile?.delete();
-  emit(
-    CameraReady(
-      controller: s.controller,
-      selectedIndex: s.selectedIndex,
-      flashMode: s.flashMode,
-      imageFile: null,
-      snackbarMessage: 'Gambar dihapus',
-    ),
-  );
-}
-Future<void> _onRequestPermissions(
-  RequestPermissions event,
-  Emitter<CameraState> emit,
-) async {
-  final statuses = await [Permission.camera, Permission.storage].request();
-
-  final denied = statuses.entries.where((e) => !e.value.isGranted).toList();
-
-  if (denied.isNotEmpty) {
-    // Tangani jika ada izin yang ditolak
-  } else {
-    // Izin diberikan, langsung trigger init kamera
-    add(InitializeCamera());
+    DeleteImage event,
+    Emitter<CameraState> emit,
+  ) async {
+    if (state is! CameraReady) return;
+    final s = state as CameraReady;
+    await s.imageFile?.delete();
+    emit(
+      CameraReady(
+        controller: s.controller,
+        selectedIndex: s.selectedIndex,
+        flashMode: s.flashMode,
+        imageFile: null,
+        snackbarMessage: 'Gambar dihapus',
+      ),
+    );
   }
-}
 
-
-  
-
- 
- 
+  Future<void> _onClearSnackbar(
+    ClearSnackbar event,
+    Emitter<CameraState> emit,
+  ) async {
+    if (state is! CameraReady) return;
+    final s = state as CameraReady;
+    emit(s.copyWith(clearSnackbar: true));
+  }
 
   Future<void> _setupController(
     int index,
@@ -161,3 +219,27 @@ Future<void> _onRequestPermissions(
       ),
     );
   }
+
+  @override
+  Future<void> close() async {
+    if (state is CameraReady) {
+      await (state as CameraReady).controller.dispose();
+    }
+    return super.close();
+  }
+
+  Future<void> _onRequestPermissions(
+    RequestPermissions event,
+    Emitter<CameraState> emit,
+  ) async {
+    final statuses = await [Permission.camera, Permission.storage].request();
+
+    final denied = statuses.entries.where((e) => !e.value.isGranted).toList();
+
+    if (denied.isNotEmpty) {
+    } else {
+      // Izin diberikan, langsung trigger init kamera
+      add(InitializeCamera());
+    }
+  }
+}
