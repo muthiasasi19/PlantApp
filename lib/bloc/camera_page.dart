@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:plant_app/bloc/camera_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
