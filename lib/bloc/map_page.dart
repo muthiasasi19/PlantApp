@@ -59,5 +59,56 @@ class MapView extends StatelessWidget {
                           }
                           : {},
                 ),
-                
+                Positioned(
+                  top: 25,
+                  left: 50,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(state.currentAddress),
+                  ),
+                ),
+                if (state.pickedAddress != null)
+                  Positioned(
+                    bottom: 120,
+                    left: 16,
+                    right: 16,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(state.pickedAddress!),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (state.pickedAddress != null)
+                  FloatingActionButton.extended(
+                    label: const Text("Pilih Alamat"),
+                    onPressed: () {
+                      Navigator.pop(context, state.pickedAddress);
+                    },
+                  ),
+                const SizedBox(height: 8),
+                if (state.pickedAddress != null)
+                  FloatingActionButton.extended(
+                    label: const Text("Hapus"),
+                    onPressed: () {
+                      context.read<MapBloc>().add(MapClearPicked());
+                    },
+                  ),
+              ],
+            ),
+          );
+        }
+        return const SizedBox();
+      },
+    );
+  }
 }
