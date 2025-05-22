@@ -60,7 +60,22 @@ Future<void> _onTakePicture(
   }
 }
 
- 
+ Future<void> _onPickGallery(
+  PickImageFromGallery event,
+  Emitter<CameraState> emit,
+) async {
+  final picker = ImagePicker();
+  final picked = await picker.pickImage(source: ImageSource.gallery);
+  if (picked == null) return;
+  final file = File(picked.path);
+  emit(
+    (state as CameraReady).copyWith(
+      imageFile: file,
+      snackbarMessage: 'Berhasil memilih dari galeri',
+    ),
+  );
+}
+
 
   
 
