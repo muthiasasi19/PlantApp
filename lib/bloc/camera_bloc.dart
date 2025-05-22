@@ -21,4 +21,56 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
 
   CameraBloc() : super(CameraInitial()) {
     on<InitializeCamera>(_onInit);
+    
+    });
+
+    
+
+  Future<void> _onInit(
+    InitializeCamera event,
+    Emitter<CameraState> emit,
+  ) async {
+    _cameras = await availableCameras();
+    await _setupController(0, emit);
+  }
+
+  Future<void> _onSwitch(SwitchCamera event, Emitter<CameraState> emit) async {
+    if (state is! CameraReady) return;
+    final s = state as CameraReady;
+    final next = (s.selectedIndex + 1) % _cameras.length;
+    await _setupController(next, emit, previous: s);
+  }
+
+ 
+
   
+
+  
+
+ 
+ 
+
+  Future<void> _setupController(
+    int index,
+    Emitter<CameraState> emit, {
+    CameraReady? previous,
+  }) async {
+    await previous?.controller.dispose();
+    final controller = CameraController(
+      _cameras[index],
+      ResolutionPreset.max,
+      enableAudio: false,
+    );
+    await controller.initialize();
+    await controller.setFlashMode(previous?.flashMode ?? FlashMode.off);
+
+    emit(
+      CameraReady(
+        controller: controller,
+        selectedIndex: index,
+        flashMode: previous?.flashMode ?? FlashMode.off,
+        imageFile: previous?.imageFile,
+        snackbarMessage: null,
+      ),
+    );
+  }
