@@ -40,6 +40,25 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
     final next = (s.selectedIndex + 1) % _cameras.length;
     await _setupController(next, emit, previous: s);
   }
+Future<void> _onTakePicture(
+  TakePicture event,
+  Emitter<CameraState> emit,
+) async {
+  if (state is! CameraReady) return;
+  final s = state as CameraReady;
+
+  if (!s.controller.value.isInitialized) {
+    emit(s.copyWith(snackbarMessage: "Kamera belum siap"));
+    return;
+  }
+
+  try {
+    final file = await s.controller.takePicture();
+    event.onPictureTaken(File(file.path));
+  } catch (e) {
+    emit(s.copyWith(snackbarMessage: "Gagal mengambil gambar: $e"));
+  }
+}
 
  
 
