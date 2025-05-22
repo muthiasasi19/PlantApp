@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../theme_constants.dart';
 
 class TitleAndPrice extends StatelessWidget {
-  const TitleAndPrice({Key key, this.title, this.country, this.price})
-    : super(key: key);
+  const TitleAndPrice({
+    super.key,
+    required this.title,
+    required this.country,
+    required this.price,
+  });
 
   final String title, country;
   final int price;
@@ -12,7 +16,9 @@ class TitleAndPrice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.kDefaultPadding,
+      ),
       child: Row(
         children: <Widget>[
           RichText(
@@ -20,8 +26,8 @@ class TitleAndPrice extends StatelessWidget {
               children: [
                 TextSpan(
                   text: "$title\n",
-                  style: Theme.of(context).textTheme.headline4.copyWith(
-                    color: kTextColor,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: AppColors.kTextColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -29,7 +35,7 @@ class TitleAndPrice extends StatelessWidget {
                   text: country,
                   style: TextStyle(
                     fontSize: 20,
-                    color: kPrimaryColor,
+                    color: AppColors.kPrimaryColor,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
@@ -41,7 +47,7 @@ class TitleAndPrice extends StatelessWidget {
             "\$$price",
             style: Theme.of(
               context,
-            ).textTheme.headline5.copyWith(color: kPrimaryColor),
+            ).textTheme.headlineSmall?.copyWith(color: AppColors.kPrimaryColor),
           ),
         ],
       ),

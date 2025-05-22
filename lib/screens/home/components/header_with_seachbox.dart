@@ -4,27 +4,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../theme_constants.dart';
 
 class HeaderWithSearchBox extends StatelessWidget {
-  const HeaderWithSearchBox({Key key, @required this.size}) : super(key: key);
+  const HeaderWithSearchBox({super.key, required this.size});
 
   final Size size;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: kDefaultPadding * 2.5),
+      margin: EdgeInsets.only(bottom: AppSpacing.kDefaultPadding * 2.5),
       // It will cover 20% of our total height
       height: size.height * 0.2,
       child: Stack(
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(
-              left: kDefaultPadding,
-              right: kDefaultPadding,
-              bottom: 36 + kDefaultPadding,
+              left: AppSpacing.kDefaultPadding,
+              right: AppSpacing.kDefaultPadding,
+              bottom: 36 + AppSpacing.kDefaultPadding,
             ),
             height: size.height * 0.2 - 27,
             decoration: BoxDecoration(
-              color: kPrimaryColor,
+              color: AppColors.kPrimaryColor,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(36),
                 bottomRight: Radius.circular(36),
@@ -34,7 +34,7 @@ class HeaderWithSearchBox extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'Hi Uishopy!',
-                  style: Theme.of(context).textTheme.headline5.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -50,8 +50,12 @@ class HeaderWithSearchBox extends StatelessWidget {
             right: 0,
             child: Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              margin: EdgeInsets.symmetric(
+                horizontal: AppSpacing.kDefaultPadding,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.kDefaultPadding,
+              ),
               height: 54,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -60,7 +64,7 @@ class HeaderWithSearchBox extends StatelessWidget {
                   BoxShadow(
                     offset: Offset(0, 10),
                     blurRadius: 50,
-                    color: kPrimaryColor.withOpacity(0.23),
+                    color: AppColors.kPrimaryColor.withOpacity(0.23),
                   ),
                 ],
               ),
@@ -72,7 +76,7 @@ class HeaderWithSearchBox extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: "Search",
                         hintStyle: TextStyle(
-                          color: kPrimaryColor.withOpacity(0.5),
+                          color: AppColors.kPrimaryColor.withOpacity(0.5),
                         ),
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,

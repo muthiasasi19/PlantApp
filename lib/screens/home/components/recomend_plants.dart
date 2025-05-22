@@ -4,7 +4,7 @@ import 'package:plant_app/screens/details/details_screen.dart';
 import '../../../theme_constants.dart';
 
 class RecomendsPlants extends StatelessWidget {
-  const RecomendsPlants({Key key}) : super(key: key);
+  const RecomendsPlants({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +51,13 @@ class RecomendsPlants extends StatelessWidget {
 
 class RecomendPlantCard extends StatelessWidget {
   const RecomendPlantCard({
-    Key key,
-    this.image,
-    this.title,
-    this.country,
-    this.price,
-    this.press,
-  }) : super(key: key);
+    required this.image,
+    required this.title,
+    required this.country,
+    required this.price,
+    required this.press,
+    super.key,
+  });
 
   final String image, title, country;
   final int price;
@@ -65,12 +65,25 @@ class RecomendPlantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Isi build method kamu di sini
+    return Container(); // Ganti dengan widget aslinya
+  }
+}
+
+
+final String image, title, country;
+final int price;
+final Function press;
+
+
+    @override
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(
-        left: kDefaultPadding,
-        top: kDefaultPadding / 2,
-        bottom: kDefaultPadding * 2.5,
+        left: AppSpacing.kDefaultPadding,
+        top: AppSpacing.kDefaultPadding / 2,
+        bottom: AppSpacing.kDefaultPadding * 2.5,
       ),
       width: size.width * 0.4,
       child: Column(
@@ -79,7 +92,7 @@ class RecomendPlantCard extends StatelessWidget {
           GestureDetector(
             onTap: press,
             child: Container(
-              padding: EdgeInsets.all(kDefaultPadding / 2),
+              padding: EdgeInsets.all(AppSpacing.kDefaultPadding / 2),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -90,7 +103,7 @@ class RecomendPlantCard extends StatelessWidget {
                   BoxShadow(
                     offset: Offset(0, 10),
                     blurRadius: 50,
-                    color: kPrimaryColor.withOpacity(0.23),
+                    color: AppColors.kPrimaryColor.withOpacity(0.23),
                   ),
                 ],
               ),
@@ -101,12 +114,12 @@ class RecomendPlantCard extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: "$title\n".toUpperCase(),
-                          style: Theme.of(context).textTheme.button,
+style: Theme.of(context).textTheme.labelLarge,
                         ),
                         TextSpan(
                           text: "$country".toUpperCase(),
                           style: TextStyle(
-                            color: kPrimaryColor.withOpacity(0.5),
+                            color: AppColors.kPrimaryColor.withOpacity(0.5),
                           ),
                         ),
                       ],
@@ -115,9 +128,9 @@ class RecomendPlantCard extends StatelessWidget {
                   Spacer(),
                   Text(
                     '\$$price',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.button.copyWith(color: kPrimaryColor),
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: AppColors.kPrimaryColor,
+                        ),
                   ),
                 ],
               ),
@@ -127,4 +140,3 @@ class RecomendPlantCard extends StatelessWidget {
       ),
     );
   }
-}

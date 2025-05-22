@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../theme_constants.dart';
 
 class FeaturedPlants extends StatelessWidget {
-  const FeaturedPlants({Key key}) : super(key: key);
-
+  const FeaturedPlants({super.key});
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -26,7 +25,8 @@ class FeaturedPlants extends StatelessWidget {
 }
 
 class FeaturePlantCard extends StatelessWidget {
-  const FeaturePlantCard({Key key, this.image, this.press}) : super(key: key);
+  const FeaturePlantCard({super.key, required this.image, required this.press});
+
   final String image;
   final Function press;
 
@@ -37,9 +37,9 @@ class FeaturePlantCard extends StatelessWidget {
       onTap: press,
       child: Container(
         margin: EdgeInsets.only(
-          left: kDefaultPadding,
-          top: kDefaultPadding / 2,
-          bottom: kDefaultPadding / 2,
+          left: AppSpacing.kDefaultPadding,
+          top: AppSpacing.kDefaultPadding / 2,
+          bottom: AppSpacing.kDefaultPadding / 2,
         ),
         width: size.width * 0.8,
         height: 185,

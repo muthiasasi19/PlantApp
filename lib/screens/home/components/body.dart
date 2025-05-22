@@ -20,7 +20,7 @@ class Body extends StatelessWidget {
           RecomendsPlants(),
           TitleWithMoreBtn(title: "Featured Plants", press: () {}),
           FeaturedPlants(),
-          SizedBox(height: kDefaultPadding),
+          SizedBox(height: AppSpacing.kDefaultPadding),
         ],
       ),
     );
