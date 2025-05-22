@@ -29,4 +29,33 @@ class MapLoaded extends MapState {
       pickedAddress: pickedAddress,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MapLoaded &&
+          currentPosition == other.currentPosition &&
+          currentAddress == other.currentAddress &&
+          pickedLatLng == other.pickedLatLng &&
+          pickedAddress == other.pickedAddress;
+
+  @override
+  int get hashCode =>
+      currentPosition.hashCode ^
+      currentAddress.hashCode ^
+      pickedLatLng.hashCode ^
+      pickedAddress.hashCode;
+}
+
+class MapError extends MapState {
+  final String message;
+
+  const MapError(this.message);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is MapError && message == other.message;
+
+  @override
+  int get hashCode => message.hashCode;
 }
